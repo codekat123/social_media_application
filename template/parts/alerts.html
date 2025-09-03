@@ -1,0 +1,25 @@
+{% if messages %}
+  <div class="mb-6 w-full">
+    {% for message in messages %}
+      <div class="px-6 py-4 rounded-xl shadow-lg text-white text-center 
+        {% if message.tags == 'success' %} bg-green-500 
+        {% elif message.tags == 'error' %} bg-red-500 
+        {% elif message.tags == 'warning' %} bg-yellow-500 text-black 
+        {% else %} bg-blue-500 {% endif %}">
+        <p class="font-medium">{{ message }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    $(document).ready(function(){
+        setTimeout(function(){
+            $('.x').fadeOut('slow');
+        }, 3000);
+    });
+</script>

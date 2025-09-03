@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-8 mt-10">
+  <h2 class="text-2xl font-bold text-center text-indigo-600 mb-6">Create an Account</h2>
+
+  <form method="POST" class="space-y-5">
+    {% csrf_token %}
+
+    <!-- Username -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Username</label>
+      {% render_field form.username class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %}
+      {% if form.username.errors %}
+        <p class="text-sm text-red-500 mt-1">{{ form.username.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Email</label>
+      {% render_field form.email class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %}
+      {% if form.email.errors %}
+        <p class="text-sm text-red-500 mt-1">{{ form.email.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Password1 -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Password</label>
+      {% render_field form.password1 class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %}
+      {% if form.password1.help_text %}
+        <p class="text-xs text-gray-500 mt-1">{{ form.password1.help_text|safe }}</p>
+      {% endif %}
+      {% if form.password1.errors %}
+        <p class="text-sm text-red-500 mt-1">{{ form.password1.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Password2 -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+      {% render_field form.password2 class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %}
+      {% if form.password2.errors %}
+        <p class="text-sm text-red-500 mt-1">{{ form.password2.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" 
+            class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      Sign Up
+    </button>
+  </form>
+
+  <!-- Redirect to login -->
+  <p class="text-sm text-gray-600 mt-4 text-center">
+    Already have an account?
+    <a href="{% url 'accounts:login' %}" class="text-indigo-600 hover:underline">Login</a>
+  </p>
+</div>
+{% endblock %}

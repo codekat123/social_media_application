@@ -3,6 +3,6 @@ from .views import *
 
 app_name = "posts"
 
-urlspattern = [
+urlpatterns = [
 
 ]

@@ -1,0 +1,9 @@
+{% autoescape off %}
+HI {{user.username}} <br><br><br>
+
+please click the link  below to comfirm your registeration <br>
+<a href="{{ activation_link }}" style="background:#4CAF50;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">
+  Activate Account
+</a>
+
+{% endautoescape %}
