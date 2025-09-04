@@ -1,4 +1,5 @@
 {% if messages %}
+  <div class="x">
   <div class="mb-6 w-full">
     {% for message in messages %}
       <div class="px-6 py-4 rounded-xl shadow-lg text-white text-center 
@@ -10,6 +11,7 @@
       </div>
     {% endfor %}
   </div>
+  </div>
 {% endif %}
 
 
@@ -20,6 +22,6 @@
     $(document).ready(function(){
         setTimeout(function(){
             $('.x').fadeOut('slow');
-        }, 3000);
+        }, 2000);
     });
 </script>

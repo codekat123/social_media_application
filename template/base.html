@@ -6,16 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}MyApp{% endblock title %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  {% block head %}{% endblock head %}
 </head>
 <body class="bg-gray-50">
 
-  
-{% if not request.resolver_match.url_name in 'login signup' %}
-  <nav> ... </nav>
-{% endif %}
-  
 
+{% include 'parts/navbar.html' %}
   <main class="max-w-7xl mx-auto px-4 py-6">
     {% block content %}{% endblock content %}
   </main>

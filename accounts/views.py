@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect , get_object_or_404
-from django.views.generic.edit import CreateView , UpdateView
+from django.views.generic.edit import CreateView
 from django.contrib.auth import logout , login , authenticate
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -12,6 +12,9 @@ from django.conf import settings
 from .models import User
 from .forms import SignUpForm
 from django.contrib import messages
+
+
+
 class SignUpView(CreateView):
      model = User
      form_class = SignUpForm
@@ -40,7 +43,7 @@ class SignUpView(CreateView):
      
      def get(self,*args,**kwargs):
           if self.request.user.is_authenticated:
-               return redirect('/')
+               return redirect('friends:profile')
           return super(SignUpView,self).get(*args,**kwargs)
      
 def activation_account(request,uid,token):
@@ -50,8 +53,10 @@ def activation_account(request,uid,token):
      if user is not None and default_token_generator.check_token(user,token):
           user.is_active = True
           user.save()
+          messages.success(request,"your account has been activated")
           return redirect('accounts:login')
      else:
+          messages.error(request,"something went wrong")
           return redirect('sign-up') 
      
 
@@ -60,16 +65,22 @@ def login_user(request):
           username = request.POST.get('username')
           password = request.POST.get('password')
           
-          user = authenticate(username=username,password=password)
+          user = authenticate(request,username=username,password=password)
           if user is not None:
                login(request,user)
-               return redirect('accounts:profile')
+               return redirect('friends:profile')
           else:
-               print('error')
-               return redirect('accounts:login')
+               try:
+                    user = User.objects.get(username=username)
+                    if not user.is_active:
+                         messages.warning(request,"please active your account ")
+                    return redirect('accounts:login')
+               except User.DoesNotExist:
+                    messages.error(request,'the password or username are wrong')
+                    return redirect('accounts:login')
      else:
           return render(request,'accounts/login.html')
      
 def logout_user(request):
-     logout(request.user)
+     logout(request)
      return redirect('accounts:login')
