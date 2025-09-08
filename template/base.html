@@ -8,9 +8,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 
-{% include 'parts/navbar.html' %}
+{% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'sign-up' %}
+ {% include 'parts/navbar.html' %}
+{% endif %}
+
   <main class="max-w-7xl mx-auto px-4 py-6">
     {% block content %}{% endblock content %}
   </main>

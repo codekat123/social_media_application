@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto mt-8">
+
+  <!-- Page Title -->
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">Home Feed</h1>
+
+  <!-- Loop over posts -->
+  {% for post in object_list %}
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition p-5 mb-8">
+
+      <!-- User Info -->
+      <div class="flex items-center gap-3 mb-3">
+        <img src="{{ post.user.cover_photo.url }}" 
+             alt="Profile" 
+             class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+        <div>
+          <span class="font-semibold text-gray-900 dark:text-gray-100 block">
+            {{ post.user.username }}
+          </span>
+          <span class="text-xs text-gray-500">
+            {{ post.created_at|date:"M d, Y H:i" }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Post Content -->
+      <p class="text-gray-700 dark:text-gray-200 mb-4 leading-relaxed">
+        {{ post.caption }}
+      </p>
+
+      {% if post.image %}
+        <div class="rounded-xl overflow-hidden mb-4">
+          <img src="{{ post.image.url }}" 
+               alt="Post image" 
+               class="w-full object-cover shadow-sm">
+        </div>
+      {% endif %}
+
+      <!-- Actions -->
+      <div class="flex gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
+        <a href="{% url 'friends:friend' post.user.username %}" 
+           class="hover:text-blue-600 transition">Profile</a>
+        {% if request.user == post.user %}
+          <a href="{% url 'posts:update' post.pk %}" 
+             class="hover:text-green-600 transition">Edit</a>
+          <a href="{% url 'posts:delete' post.pk %}" 
+             class="hover:text-red-600 transition">Delete</a>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-gray-500 dark:text-gray-400 text-center">No posts to show yet. Start following people or create your own post!</p>
+  {% endfor %}
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-8 text-sm">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}"
+         class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+         ← Previous
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+
+    <span class="text-gray-600 dark:text-gray-400">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}"
+         class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+         Next →
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

@@ -5,7 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/',include('accounts.urls',namespace='accounts')),
+    path('',include('accounts.urls',namespace='accounts')),
     path('friend/',include('friends.urls',namespace='friends')),
     path('posts/',include('posts.urls',namespace='posts'))
 ]

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="max-w-lg mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">
+      Confirm Delete
+    </h2>
+
+    <p class="text-gray-600 mb-6">
+      Are you sure you want to delete this post?
+    </p>
+
+    <div class="border p-4 rounded-md bg-gray-50 mb-6">
+      <p class="text-gray-700">{{ object.caption|truncatewords:20 }}</p>
+      {% if object.image %}
+        <img src="{{ object.image.url }}" alt="Post image" class="mt-2 rounded-md">
+      {% endif %}
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="flex gap-4">
+        <button type="submit"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+          Yes, Delete
+        </button>
+        <a href="{% url 'friends:profile' %}"
+          class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

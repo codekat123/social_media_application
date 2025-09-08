@@ -83,19 +83,31 @@
 
         <hr class="my-5">
 
-        <div>
-          <h4 class="text-sm font-medium text-gray-700 mb-2">Interests</h4>
-          <!-- If you pass interests list from view: -->
-          {% if interests %}
-            <div class="flex flex-wrap gap-2">
-              {% for interest in interests %}
-                <span class="text-xs px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">{{ interest }}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            <p class="text-sm text-gray-500">No interests set.</p>
-          {% endif %}
-        </div>
+<div class="p-4 bg-white rounded-2xl shadow-sm border border-gray-200">
+  <h4 class="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+    🌐 Websites
+  </h4>
+
+  {% if request.user.website %}
+    <div class="flex flex-wrap gap-3">
+      <a 
+        href="{{request.user.website}}" 
+        target="_blank" 
+        class="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition"
+      >
+        <!-- Globe/Link icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M14 10h4.586a1 1 0 010 2H14v-2zM6.343 17.657a8 8 0 1111.314-11.314A8 8 0 016.343 17.657z" />
+        </svg>
+        <span class="text-sm font-medium">Visit Website</span>
+      </a>
+    </div>
+  {% else %}
+    <p class="text-sm text-gray-500 italic">No links to show</p>
+  {% endif %}
+</div>
+
       </aside>
 
       <!-- Right column: Posts / Activity -->
@@ -128,22 +140,47 @@
                       </div>
                     {% endif %}
 
+                    <!-- Post content -->
                     <div class="flex-1">
+                      <!-- Header: name + time + dropdown -->
                       <div class="flex items-center justify-between">
                         <div class="text-sm">
                           <span class="font-semibold text-gray-800">{{ request.user.first_name|default:request.user.username }}</span>
                           <span class="text-gray-500 ml-2 text-xs">{{ post.created_at|timesince }} ago</span>
                         </div>
-                        <div class="text-xs text-gray-400">•••</div>
+
+                        <!-- Dropdown -->
+                        <div x-data="{ open: false }" class="relative">
+                          <button @click="open = !open" class="text-gray-500 text-xl focus:outline-none">
+                            •••
+                          </button>
+
+                          <div 
+                            x-show="open"
+                            @click.away="open = false"
+                            class="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow-lg py-1 z-10"
+                          >
+                            <a href="{% url 'posts:update' post.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                              Update
+                            </a>
+                            <a href="{% url 'posts:delete' post.id %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100">
+                              Delete
+                            </a>
+                          </div>
+                        </div>
                       </div>
 
+                      <!-- Caption -->
                       <div class="mt-2 text-gray-700">
                         {{ post.caption|linebreaks }}
                       </div>
 
+                      <!-- Image -->
                       {% if post.image %}
                         <img src="{{ post.image.url }}" alt="post image" class="mt-3 rounded-lg w-full object-cover max-h-80">
                       {% endif %}
+
+                      <!-- Actions -->
                       <div class="mt-3 flex items-center gap-4 text-sm text-gray-500">
                         <button class="hover:text-indigo-600">Like</button>
                         <button class="hover:text-indigo-600">Comment</button>
@@ -152,6 +189,7 @@
                     </div>
                   </div>
                 </article>
+
               {% endfor %}
               {% if is_paginated %}
                 <nav>
@@ -182,10 +220,10 @@
         <!-- Photos grid (optional) -->
         <section class="bg-white rounded-2xl p-6 shadow">
           <h3 class="text-lg font-semibold text-gray-800 mb-4">Photos</h3>
-          {% if photos %}
+          {% if object_list %}
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {% for photo in photos %}
-                <img src="{{ request.user.image.url }}" alt="photo" class="w-full h-40 object-cover rounded-lg">
+              {% for photo in object_list %}
+                <img src="{{ photo.image.url }}" alt="photo" class="w-full h-40 object-cover rounded-lg">
               {% endfor %}
             </div>
           {% else %}
